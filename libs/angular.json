@@ -1,0 +1,47 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "system-navigator": {
+      "projectType": "library",
+      "root": "projects/system-navigator",
+      "sourceRoot": "projects/system-navigator/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/system-navigator/tsconfig.lib.json",
+            "project": "projects/system-navigator/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/system-navigator/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/system-navigator/src/test.ts",
+            "tsConfig": "projects/system-navigator/tsconfig.spec.json",
+            "karmaConfig": "projects/system-navigator/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/system-navigator/tsconfig.lib.json",
+              "projects/system-navigator/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }},
+  "defaultProject": "system-navigator"
+}
