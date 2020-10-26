@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AppUrl } from './models';
+import { AppUrl, ServerResponse } from './models';
 
 export class SystemNavigatorServiceConfig {
     api: string;
@@ -14,19 +14,21 @@ export class SystemNavigatorService {
     api: string;
     imageToShow: string | ArrayBuffer;
 
-    constructor(@Inject(SystemNavigatorServiceConfig) config: SystemNavigatorServiceConfig, private http: HttpClient) {
+    constructor(@Inject(SystemNavigatorServiceConfig) config: SystemNavigatorServiceConfig, public http: HttpClient) {
         this.api = config.api;
     }
 
-    getUrls(): Observable<AppUrl[]> {
-        return this.http.get<AppUrl[]>(this.api).pipe(
-            map((res) =>
-                res.map((appUrl) => {
+    getUrls(): Observable<ServerResponse> {
+        return this.http.get<ServerResponse>(this.api).pipe(
+            map((res: ServerResponse) => {
+                res.data.map((appUrl: AppUrl) => {
                     this.createImageFromBlob(appUrl.image);
                     appUrl.image = this.imageToShow;
                     return appUrl;
-                })
-            )
+                });
+
+                return res;
+            })
         );
     }
 

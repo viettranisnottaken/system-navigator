@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { SystemNavigatorService } from './system-navigator.service';
-import { AppUrl } from './models';
+import { AppUrl, ServerResponse } from './models';
 
 @Component({
     selector: 'lib-system-navigator',
@@ -11,16 +11,33 @@ export class SystemNavigatorComponent implements OnInit {
     appUrls: AppUrl[];
     isMenuOpen = false;
 
-    constructor(private service: SystemNavigatorService) {}
+    @HostListener('document:click', ['$event'])
+    onDocumentClick(event): void {
+        if (!this.eRef.nativeElement.contains(event.target)) {
+            this.isMenuOpen = false;
+        }
+    }
+
+    @HostListener('document:keyup.escape', ['$event'])
+    onEscKeyUp(event: KeyboardEvent) {
+        this.isMenuOpen = false;
+    }
+
+    constructor(private service: SystemNavigatorService, private eRef: ElementRef) {}
 
     ngOnInit(): void {
         this.getUrls();
     }
 
     getUrls(): void {
-        this.service.getUrls().subscribe((res) => {
-            this.appUrls = res;
-        });
+        this.service.getUrls().subscribe(
+            (res: ServerResponse) => {
+                this.appUrls = res.data;
+            },
+            (err) => {
+                console.error(err);
+            }
+        );
     }
 
     toggleMenu(): void {

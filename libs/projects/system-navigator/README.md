@@ -48,9 +48,45 @@ Run `ng test system-navigator` to execute the unit tests via [Karma](https://kar
     }
 ```
 
-2. Add `<lib-system-navigator></lib-system-navigator>` to where you want to use it
+2. Add `<lib-system-navigator></lib-system-navigator>` to where you want to use it.
+3. Wrap a div around `<lib-system-navigator></lib-system-navigator>` to style it however you want. Like this:
+    ```HTML
+    <div class="menu-container">
+        <lib-system-navigator></lib-system-navigator>
+    </div>
+    ```
 
 ## APIs
+
+The library expect a response like this from your api:
+
+```JSON
+{
+  "status": true,
+  "message": "ok",
+  "httpCode": 200,
+  "data": [
+    {
+      "name": "admin",
+      "url": "https://google.com",
+      "image": null
+    },
+    {
+      "name": "marketing platform",
+      "url": "https://www.youtube.com/watch?v=kXYiU_JCYtU",
+      "image": "https://photo-1-baomoi.zadn.vn/w1000_r1/2020_05_04_105_34923369/882279561615ff4ba604.jpg"
+    },
+    {
+      "name": "marketing platform",
+      "url": "https://www.youtube.com/watch?v=kXYiU_JCYtU",
+      "image": "https://photo-1-baomoi.zadn.vn/w1000_r1/2020_05_04_105_34923369/882279561615ff4ba604.jpg"
+    },
+  ],
+  "errorCode": "ok"
+}
+```
+
+Here are some interfaces
 
 ```typescript
 export interface AppUrl {
@@ -58,4 +94,16 @@ export interface AppUrl {
     url: string;
     image?: any;
 }
+
+export interface ServerResponse {
+    status?: boolean;
+    message?: string;
+    httpCode?: number;
+    data: AppUrl[];
+    errorCode?: string;
+}
 ```
+
+## Plans for next version
+
+    - Themes can be imported
