@@ -10,6 +10,7 @@ import { HttpErrorInterceptor } from './http-error.interceptor';
 
 @NgModule({
     declarations: [SystemNavigatorComponent, InitialsPipe],
+    providers: [SystemNavigatorService],
     imports: [CommonModule, BrowserModule, HttpClientModule],
     exports: [SystemNavigatorComponent],
 })
@@ -17,7 +18,7 @@ export class SystemNavigatorModule {
     constructor(@Optional() @SkipSelf() @Inject(SystemNavigatorComponent) parentModule?: SystemNavigatorComponent) {}
 
     static forChild(
-        @Inject(SystemNavigatorServiceConfig) config: SystemNavigatorServiceConfig
+        @Optional() @Inject(SystemNavigatorServiceConfig) config?: SystemNavigatorServiceConfig
     ): ModuleWithProviders<SystemNavigatorModule> {
         return {
             ngModule: SystemNavigatorModule,
@@ -26,7 +27,6 @@ export class SystemNavigatorModule {
                     provide: SystemNavigatorServiceConfig,
                     useValue: config,
                 },
-                SystemNavigatorService,
                 {
                     provide: HTTP_INTERCEPTORS,
                     useClass: HttpErrorInterceptor,
