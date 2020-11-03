@@ -1,35 +1,43 @@
-import { Inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable, Optional } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AppUrl, ServerResponse } from './models';
 
 export class SystemNavigatorServiceConfig {
     api: string;
-    header?: any;
+    headers?: any;
 }
 
 @Injectable()
 export class SystemNavigatorService {
     api: string;
+    headers: any;
     imageToShow: string | ArrayBuffer;
 
-    constructor(@Inject(SystemNavigatorServiceConfig) config: SystemNavigatorServiceConfig, public http: HttpClient) {
-        this.api = config.api;
+    constructor(public http: HttpClient, @Optional() @Inject(SystemNavigatorServiceConfig) config?: SystemNavigatorServiceConfig) {
+        if (config) {
+            this.api = config.api;
+            this.headers = config.headers;
+        }
     }
 
     getUrls(): Observable<ServerResponse> {
-        return this.http.get<ServerResponse>(this.api).pipe(
-            map((res: ServerResponse) => {
-                res.data.map((appUrl: AppUrl) => {
-                    this.createImageFromBlob(appUrl.image);
-                    appUrl.image = this.imageToShow;
-                    return appUrl;
-                });
+        const headers = new HttpHeaders(this.headers);
 
-                return res;
-            })
-        );
+        return this.http
+            .get<ServerResponse>(this.api, { headers })
+            .pipe(
+                map((res: ServerResponse) => {
+                    res.data.map((appUrl: AppUrl) => {
+                        this.createImageFromBlob(appUrl.image);
+                        appUrl.image = this.imageToShow;
+                        return appUrl;
+                    });
+
+                    return res;
+                })
+            );
     }
 
     private createImageFromBlob(image: Blob | string) {

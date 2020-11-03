@@ -22,37 +22,98 @@ Run `ng test system-navigator` to execute the unit tests via [Karma](https://kar
 
 ## Usage
 
+You can either call API for the urls, or just pass them in via `@Input()`
+
+### Getting urls by calling API
+
 1. Add `SystemNavigatorModule` to the module that you wish to use it in and use `forChild({ api: 'someUrl'})` to pass in the url of the API that will provide information about the applications icons on the menu:
 
-```typescript
-...
-    import { SystemNavigatorModule } from 'system-navigator';
+    ```typescript
+    ...
+        import { SystemNavigatorModule } from 'system-navigator';
 
-    @NgModule({
-        declarations: [
-            ...
-        ],
-        exports: [
-            ...
-            SystemNavigatorModule,
-        ],
-        providers: [
-            HtmlClassService,
-        ],
-        imports: [
-            ...
-            SystemNavigatorModule.forChild({ api: 'https://sample-api.com/urls', headers: {'SomeHeader': '123'} }),
-        ]
-    })
-    export class ThemeModule {
-    }
-```
+        @NgModule({
+            declarations: [
+                ...
+            ],
+            exports: [
+                ...
+                SystemNavigatorModule,
+            ],
+            providers: [
+                HtmlClassService,
+            ],
+            imports: [
+                ...
+                SystemNavigatorModule.forChild({ api: 'https://sample-api.com/urls', headers: {'SomeHeader': '123'} }),
+            ]
+        })
+        export class ThemeModule {
+        }
+    ```
 
 2. Add `<lib-system-navigator></lib-system-navigator>` to where you want to use it.
 3. Wrap a div around `<lib-system-navigator></lib-system-navigator>` to style it however you want. Like this:
     ```HTML
     <div class="menu-container">
         <lib-system-navigator></lib-system-navigator>
+    </div>
+    ```
+
+### Passing data in `@Input()`
+
+1. Add `SystemNavigatorModule` to the module that you wish to use. No need to run `forChild()`
+
+    ```typescript
+    ...
+        import { SystemNavigatorModule } from 'system-navigator';
+
+        @NgModule({
+            declarations: [
+                ...
+            ],
+            exports: [
+                ...
+                SystemNavigatorModule,
+            ],
+            providers: [
+                HtmlClassService,
+            ],
+            imports: [
+                ...
+                SystemNavigatorModule,
+            ]
+        })
+        export class ThemeModule {
+        }
+    ```
+
+2. Add `<lib-system-navigator [inputAppUrls]="appUrls"></lib-system-navigator>` to where you want to use it. The `appUrls` is the data passed into the component via `@Input`, which takes the form of:
+
+    ```typescript
+    inputAppUrls = [
+        {
+        name: "admin",
+        url: "https://google.com",
+        image: null
+        },
+        {
+        name: "marketing platform",
+        url: "https://www.youtube.com/watch?v=kXYiU_JCYtU",
+        image: "https://photo-1-baomoi.zadn.vn/w1000_r1/2020_05_04_105_34923369/882279561615ff4ba604.jpg"
+        },
+        {
+        name: "marketing platform",
+        url: "https://www.youtube.com/watch?v=kXYiU_JCYtU",
+        image: "https://photo-1-baomoi.zadn.vn/w1000_r1/2020_05_04_105_34923369/882279561615ff4ba604.jpg"
+        },
+    ],
+    ```
+
+3. Wrap a div around `<lib-system-navigator [inputAppUrls]="appUrls"></lib-system-navigator>` to style it however you want. Like this:
+    ```HTML
+    <div class="menu-container">
+        <lib-system-navigator [inputAppUrls]="appUrls"></lib-system-navigator>
     </div>
     ```
 

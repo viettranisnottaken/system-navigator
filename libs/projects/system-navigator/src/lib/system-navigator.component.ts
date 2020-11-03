@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit } from '@angular/core';
 import { SystemNavigatorService } from './system-navigator.service';
 import { AppUrl, ServerResponse } from './models';
 
@@ -8,6 +8,8 @@ import { AppUrl, ServerResponse } from './models';
     styleUrls: ['./system-navigator.component.scss'],
 })
 export class SystemNavigatorComponent implements OnInit {
+    @Input() inputAppUrls: AppUrl[];
+
     appUrls: AppUrl[];
     isMenuOpen = false;
 
@@ -30,6 +32,11 @@ export class SystemNavigatorComponent implements OnInit {
     }
 
     getUrls(): void {
+        if (this.inputAppUrls) {
+            this.appUrls = this.inputAppUrls;
+            return;
+        }
+
         this.service.getUrls().subscribe(
             (res: ServerResponse) => {
                 this.appUrls = res.data;
@@ -42,9 +49,5 @@ export class SystemNavigatorComponent implements OnInit {
 
     toggleMenu(): void {
         this.isMenuOpen = !this.isMenuOpen;
-    }
-
-    navigateTo(url: string): void {
-        window.location.href = url;
     }
 }
