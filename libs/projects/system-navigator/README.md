@@ -1,6 +1,7 @@
 # SystemNavigator
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.6.
+Github repo, in case you want to meddle with it: https://github.com/viettranisnottaken/system-navigator
 
 ## Code scaffolding
 
